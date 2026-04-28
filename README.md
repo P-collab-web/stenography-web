@@ -37,11 +37,13 @@
 
 - **Step 1: Install Python**  
   Make sure you have Python (version 3.8 or higher) installed on your system.  
-  You can check by running:
+  You can check by running on the terminal:
    - python --version
+     
 - **Step 2: Install dependencies**  
   Install all required libraries using the provided requirements file:
    - pip install -r requirements.txt
+     
   This will install:
    - streamlit
    - pillow
@@ -58,3 +60,20 @@
 - **Step 5: Use the application**  
   To encode: upload an image, enter a secret message and password, then download the encoded image.  
   To decode: upload an encoded image, enter the correct password, and retrieve the hidden message.
+
+## 4.Technologies Used
+
+- **Python**  
+  Core programming language used for implementing the application logic and functionality.
+
+- **Streamlit**  
+  Framework used to build the interactive web-based user interface quickly and efficiently.
+
+- **Pillow (PIL)**  
+  Library used for image processing, including reading, modifying, and saving image data.
+
+- **Cryptography**  
+  Used to securely encrypt and decrypt messages באמצעות password-based key derivation (PBKDF2) and symmetric encryption (Fernet).
+
+- **Standard Python Libraries**  
+  Includes modules such as `io`, `base64`, and `secrets` for handling data encoding, random generation, and file        processing.
