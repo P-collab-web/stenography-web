@@ -42,10 +42,10 @@
 - **Step 2: Install dependencies**  
   Install all required libraries using the provided requirements file:
    - pip install -r requirements.txt
-This will install:
-- streamlit
-- pillow
-- cryptography
+  This will install:
+   - streamlit
+   - pillow
+   - cryptography
 
 - **Step 3: Run the application**  
   Launch the Streamlit web app with:
