@@ -8,7 +8,11 @@ The web app can encode and decode messages, has password-protected encryption an
 
 **Installation**
 
-`pip install -r environment.yml`
+## Installation
+
+`conda env create -f environment.yml`
+`conda activate steganography-env`
+`pip install -e`
 
 **Run**
 
