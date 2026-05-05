@@ -1,9 +1,25 @@
 from PIL import Image
 
-from steganography_web.crypto import encrypt_message, decrypt_message
-from steganography_web.utils import bytes_to_bits, bits_to_bytes
+from steganography_web.crypto import decrypt_message, encrypt_message
+from steganography_web.utils import bits_to_bytes, bytes_to_bits
+
+
+MAGIC = b"STEGO1"
+HEADER_SIZE = len(MAGIC) + 16 + 4  # magic + salt + encrypted length
+
 
 def get_capacity_chars(image: Image.Image) -> int:
+    """
+    Estimates how many characters can be hidden in the image.
+
+    The image is converted to RGB, and we use one bit from each color channel.
+
+    Parameters:
+        image (Image.Image): Image where the message will be hidden
+
+    Returns:
+        int: Approximate number of characters that can be stored
+    """
     image = image.convert("RGB")
     total_bits = image.width * image.height * 3
     usable_bits = total_bits - (HEADER_SIZE * 8)
@@ -13,6 +29,23 @@ def get_capacity_chars(image: Image.Image) -> int:
 
 
 def encode_image(image: Image.Image, message: str, password: str) -> Image.Image:
+    """
+    Hides an encrypted message inside an image.
+
+    The message is first encrypted with the password, then converted into bits.
+    These bits are stored in the least significant bits of the image pixels.
+
+    Parameters:
+        image (Image.Image): Original image
+        message (str): Secret message to hide
+        password (str): Password used to encrypt the message
+
+    Returns:
+        Image.Image: New image containing the hidden message
+
+    Raises:
+        ValueError: If the message is too large for the image
+    """
     image = image.convert("RGB")
     salt, encrypted = encrypt_message(message, password)
 
@@ -45,6 +78,22 @@ def encode_image(image: Image.Image, message: str, password: str) -> Image.Image
 
 
 def decode_image(image: Image.Image, password: str) -> str:
+    """
+    Extracts and decrypts a hidden message from an image.
+
+    The function reads the least significant bits of the pixels, rebuilds the
+    hidden data, checks that it has the correct header, and decrypts the message.
+
+    Parameters:
+        image (Image.Image): Image that may contain a hidden message
+        password (str): Password used to decrypt the hidden message
+
+    Returns:
+        str: Hidden message
+
+    Raises:
+        ValueError: If no valid hidden message is found
+    """
     image = image.convert("RGB")
     pixels = list(image.getdata())
 
@@ -78,6 +127,3 @@ def decode_image(image: Image.Image, password: str) -> str:
 
     encrypted = raw[encrypted_start:encrypted_end]
     return decrypt_message(encrypted, password, salt)
-
-MAGIC = b"STEGO1"
-HEADER_SIZE = len(MAGIC) + 16 + 4  # magic + salt + encrypted length
